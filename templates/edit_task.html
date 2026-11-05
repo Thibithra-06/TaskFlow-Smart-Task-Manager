@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Task | TaskFlow</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .edit-container {
+            max-width: 650px;
+            margin: 50px auto;
+        }
+
+        .edit-container h1 {
+            margin-bottom: 10px;
+        }
+
+        .edit-description {
+            color: #858ba0;
+            margin-bottom: 25px;
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .edit-form label {
+            font-weight: 600;
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        .edit-form input,
+        .edit-form select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dfe2eb;
+            border-radius: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .edit-form button,
+        .cancel-button {
+            display: inline-block;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .edit-form button {
+            background: #6257d9;
+            color: white;
+        }
+
+        .cancel-button {
+            background: #f0f1f6;
+            color: #454b60;
+            text-align: center;
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+
+        <aside class="sidebar">
+            <h2>TaskFlow<span>.</span></h2>
+            <p class="menu-label">WORKSPACE</p>
+            <a href="/">▦ &nbsp; Dashboard</a>
+            <p class="sidebar-note">Stay organized. Get things done.</p>
+            <div class="sidebar-footer">SMART TASK MANAGER</div>
+        </aside>
+
+        <main class="content">
+            <div class="edit-container">
+
+                <p class="eyebrow">WORKSPACE / EDIT TASK</p>
+
+                <h1>Edit Task</h1>
+
+                <p class="edit-description">
+                    Update your task details and save your changes.
+                </p>
+
+                <section class="panel">
+
+                    <form class="edit-form" method="POST">
+
+                        <div>
+                            <label for="title">Task Name</label>
+                            <input
+                                type="text"
+                                id="title"
+                                name="title"
+                                value="{{ task.title }}"
+                                maxlength="200"
+                                required
+                            >
+                        </div>
+
+                        <div>
+                            <label for="priority">Priority</label>
+
+                            <select id="priority" name="priority">
+                                <option value="Low"
+                                    {% if task.priority == 'Low' %}selected{% endif %}>
+                                    Low Priority
+                                </option>
+
+                                <option value="Medium"
+                                    {% if task.priority == 'Medium' %}selected{% endif %}>
+                                    Medium Priority
+                                </option>
+
+                                <option value="High"
+                                    {% if task.priority == 'High' %}selected{% endif %}>
+                                    High Priority
+                                </option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="due_date">Due Date</label>
+                            <input
+                                type="date"
+                                id="due_date"
+                                name="due_date"
+                                value="{{ task.due_date or '' }}"
+                            >
+                        </div>
+
+                        <div class="edit-actions">
+                            <button type="submit">Save Changes</button>
+                            <a class="cancel-button" href="/">Cancel</a>
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+        </main>
+
+    </div>
+</body>
+</html>
+

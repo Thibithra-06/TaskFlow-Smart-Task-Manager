@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email | TaskFlow</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f1f5f9;
+        }
+
+        .container {
+            width: 380px;
+            padding: 35px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        h1 {
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 20px;
+            text-align: center;
+            letter-spacing: 7px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .message {
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>TaskFlow.</h1>
+
+    <p>
+        Email Verification<br>
+        Enter the 6-digit OTP sent to your email address.
+    </p>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="otp"
+            placeholder="000000"
+            maxlength="6"
+            pattern="[0-9]{6}"
+            inputmode="numeric"
+            required
+        >
+
+        <button type="submit">Verify Email</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

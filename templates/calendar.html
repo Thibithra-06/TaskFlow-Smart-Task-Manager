@@ -1,0 +1,195 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar | TaskFlow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .calendar-content {
+            flex: 1;
+            padding: 35px;
+            background: #f5f6fc;
+            min-height: 100vh;
+        }
+
+        .calendar-heading {
+            margin-bottom: 25px;
+        }
+
+        .calendar-heading h1 {
+            color: #202342;
+            font-size: 28px;
+        }
+
+        .calendar-heading p {
+            color: #85889e;
+            margin-top: 8px;
+        }
+
+        .calendar-summary {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .calendar-summary h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .calendar-summary p {
+            color: #777;
+        }
+
+        .calendar-task {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .calendar-task h3 {
+            color: #252746;
+            margin-bottom: 8px;
+        }
+
+        .calendar-task p {
+            color: #85889e;
+            font-size: 13px;
+        }
+
+        .calendar-date {
+            background: #eeedff;
+            color: #6257d9;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .calendar-empty {
+            background: white;
+            padding: 35px;
+            text-align: center;
+            border-radius: 12px;
+            color: #777;
+        }
+
+        @media(max-width: 700px) {
+            .calendar-content {
+                padding: 20px;
+            }
+
+            .calendar-task {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <h2>TaskFlow<span>.</span></h2>
+            <p>PRODUCTIVITY WORKSPACE</p>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-label">WORKSPACE</p>
+
+            <a href="/">▦ &nbsp; Dashboard</a>
+            <a href="/#tasks">☑ &nbsp; My Tasks</a>
+            <a class="active" href="{{ url_for('calendar') }}">▦ &nbsp; Calendar</a>
+
+            <p class="menu-label">INSIGHTS</p>
+
+            <a href="{{ url_for('analytics') }}">▥ &nbsp; Analytics</a>
+            <a href="{{ url_for('notifications') }}">♢ &nbsp; Notifications</a>
+
+            <p class="menu-label">PREFERENCES</p>
+
+            <a href="{{ url_for('settings') }}">⚙ &nbsp; Settings</a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-note">
+                Stay organized.<br>
+                Get things done.
+            </div>
+
+            <div class="sidebar-footer">
+                TASKFLOW © 2026
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="calendar-content">
+
+        <div class="calendar-heading">
+            <h1>Task Calendar</h1>
+            <p>View and manage your upcoming deadlines.</p>
+        </div>
+
+        <div class="calendar-summary">
+            <h2>My Schedule</h2>
+            <p>Total scheduled tasks: {{ tasks|length }}</p>
+        </div>
+
+        {% if tasks %}
+
+            {% for task in tasks %}
+
+                <div class="calendar-task">
+
+                    <div>
+                        <h3>{{ task['title'] }}</h3>
+
+                        <p>
+                            Priority: {{ task['priority'] }}
+                            &nbsp; | &nbsp;
+                            Status: {{ task['status'] }}
+                        </p>
+                    </div>
+
+                    <div class="calendar-date">
+                        {{ task['due_date'] }}
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="calendar-empty">
+                <h2>No Scheduled Tasks</h2>
+                <p>Add a task with a due date from your Dashboard.</p>
+            </div>
+
+        {% endif %}
+
+    </main>
+
+</div>
+
+</body>
+</html>
+```

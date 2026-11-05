@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics | TaskFlow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .analytics-content {
+            flex: 1;
+            padding: 35px;
+            background: #f5f6fc;
+            min-height: 100vh;
+        }
+
+        .analytics-header h1 {
+            color: #202342;
+            font-size: 28px;
+        }
+
+        .analytics-header p {
+            color: #85889e;
+            margin-top: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(150px, 1fr));
+            gap: 18px;
+            margin: 28px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 23px;
+            border-radius: 13px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.04);
+        }
+
+        .stat-card p {
+            color: #85889e;
+            font-size: 13px;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+            color: #252746;
+            margin-top: 12px;
+        }
+
+        .analytics-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 13px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.04);
+        }
+
+        .analytics-panel h2 {
+            color: #252746;
+            font-size: 19px;
+            margin-bottom: 20px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 13px;
+            background: #ececf5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #6558dc;
+            border-radius: 20px;
+            transition: width .4s ease;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .priority-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eeeef4;
+            color: #555;
+        }
+
+        .priority-row:last-child {
+            border-bottom: none;
+        }
+
+        .priority-count {
+            font-weight: bold;
+            color: #6558dc;
+        }
+
+        @media(max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 560px) {
+            .analytics-content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <h2>TaskFlow<span>.</span></h2>
+            <p>PRODUCTIVITY WORKSPACE</p>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-label">WORKSPACE</p>
+
+            <a href="/">▦ &nbsp; Dashboard</a>
+            <a href="/#tasks">☑ &nbsp; My Tasks</a>
+            <a href="{{ url_for('calendar') }}">▦ &nbsp; Calendar</a>
+
+            <p class="menu-label">INSIGHTS</p>
+
+            <a class="active" href="{{ url_for('analytics') }}">▥ &nbsp; Analytics</a>
+            <a href="{{ url_for('notifications') }}">♢ &nbsp; Notifications</a>
+
+            <p class="menu-label">PREFERENCES</p>
+
+            <a href="{{ url_for('settings') }}">⚙ &nbsp; Settings</a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-note">
+                Stay organized.<br>
+                Get things done.
+            </div>
+
+            <div class="sidebar-footer">
+                TASKFLOW © 2026
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="analytics-content">
+
+        <div class="analytics-header">
+            <h1>Analytics Overview</h1>
+            <p>Track your productivity and task performance.</p>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <p>Total Tasks</p>
+                <h2>{{ total }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Completed Tasks</p>
+                <h2>{{ completed }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Pending Tasks</p>
+                <h2>{{ pending }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <p>Overdue Tasks</p>
+                <h2>{{ overdue }}</h2>
+            </div>
+
+        </div>
+
+        <div class="analytics-panel">
+
+            <h2>Productivity Progress</h2>
+
+            <div class="progress-track">
+                <div class="progress-fill"
+                     style="width: {{ percentage }}%;">
+                </div>
+            </div>
+
+            <div class="progress-info">
+                <span>Task Completion Rate</span>
+                <strong>{{ percentage }}%</strong>
+            </div>
+
+        </div>
+
+        <div class="analytics-panel">
+
+            <h2>Priority Breakdown</h2>
+
+            {% for item in priorities %}
+
+                <div class="priority-row">
+                    <span>{{ item['priority'] }} Priority</span>
+                    <span class="priority-count">{{ item['count'] }} Tasks</span>
+                </div>
+
+            {% else %}
+
+                <p>No task data available yet.</p>
+
+            {% endfor %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
+

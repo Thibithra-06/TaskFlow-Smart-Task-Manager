@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | TaskFlow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .settings-content {
+            flex: 1;
+            padding: 35px;
+            background: #f5f6fc;
+            min-height: 100vh;
+            color: #252746;
+            transition: 0.3s;
+        }
+
+        .settings-header h1 {
+            font-size: 28px;
+        }
+
+        .settings-header p {
+            color: #85889e;
+            margin-top: 8px;
+        }
+
+        .settings-card {
+            background: white;
+            padding: 25px;
+            border-radius: 13px;
+            margin-top: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.04);
+            transition: 0.3s;
+        }
+
+        .settings-card h2 {
+            font-size: 19px;
+            margin-bottom: 18px;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .profile-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #eeedff;
+            color: #6558dc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+        }
+
+        .profile-info p {
+            color: #85889e;
+            margin-top: 5px;
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 0;
+            border-bottom: 1px solid #eeeef4;
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-row p {
+            color: #85889e;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .setting-row select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background: #6558dc;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .save-btn:hover {
+            background: #5043c4;
+        }
+
+        #saveMessage {
+            color: #219653;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        .app-info p {
+            color: #85889e;
+            margin: 12px 0;
+        }
+
+        /* Dark theme */
+        .settings-content.dark {
+            background: #171a32;
+            color: white;
+        }
+
+        .settings-content.dark .settings-card {
+            background: #252943;
+            color: white;
+        }
+
+        .settings-content.dark .settings-header p,
+        .settings-content.dark .profile-info p,
+        .settings-content.dark .setting-row p,
+        .settings-content.dark .app-info p {
+            color: #b7bbd0;
+        }
+
+        .settings-content.dark .setting-row {
+            border-color: #41445d;
+        }
+
+        @media(max-width: 600px) {
+            .settings-content {
+                padding: 20px;
+            }
+
+            .setting-row {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <h2>TaskFlow<span>.</span></h2>
+            <p>PRODUCTIVITY WORKSPACE</p>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-label">WORKSPACE</p>
+
+            <a href="/">▦ &nbsp; Dashboard</a>
+            <a href="/#tasks">☑ &nbsp; My Tasks</a>
+            <a href="{{ url_for('calendar') }}">▦ &nbsp; Calendar</a>
+
+            <p class="menu-label">INSIGHTS</p>
+
+            <a href="{{ url_for('analytics') }}">▥ &nbsp; Analytics</a>
+            <a href="{{ url_for('notifications') }}">♢ &nbsp; Notifications</a>
+
+            <p class="menu-label">PREFERENCES</p>
+
+            <a class="active" href="{{ url_for('settings') }}">⚙ &nbsp; Settings</a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-note">
+                Stay organized.<br>
+                Get things done.
+            </div>
+
+            <div class="sidebar-footer">
+                TASKFLOW © 2026
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="settings-content" id="settingsPage">
+
+        <div class="settings-header">
+            <h1>Settings</h1>
+            <p>Manage your application preferences.</p>
+        </div>
+
+        <section class="settings-card">
+
+            <h2>Application Profile</h2>
+
+            <div class="profile-info">
+                <div class="profile-icon">✓</div>
+
+                <div>
+                    <h3>TaskFlow</h3>
+                    <p>Smart Task Management System</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="settings-card">
+
+            <h2>Appearance</h2>
+
+            <div class="setting-row">
+                <div>
+                    <h3>Theme Preference</h3>
+                    <p>Choose your preferred appearance for this page.</p>
+                </div>
+
+                <select id="themeSelect">
+                    <option value="light">Light Mode</option>
+                    <option value="dark">Dark Mode</option>
+                </select>
+            </div>
+
+            <button class="save-btn" onclick="saveSettings()">
+                Save Preferences
+            </button>
+
+            <p id="saveMessage"></p>
+
+        </section>
+
+        <section class="settings-card app-info">
+
+            <h2>Application Information</h2>
+
+            <p><strong>Application:</strong> TaskFlow</p>
+            <p><strong>Version:</strong> 1.0.0</p>
+            <p><strong>Backend:</strong> Python Flask</p>
+            <p><strong>Database:</strong> SQLite</p>
+            <p><strong>Frontend:</strong> HTML, CSS and JavaScript</p>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    const settingsPage = document.getElementById("settingsPage");
+    const themeSelect = document.getElementById("themeSelect");
+
+    function applyTheme(theme) {
+        settingsPage.classList.toggle("dark", theme === "dark");
+        themeSelect.value = theme;
+    }
+
+    const savedTheme = localStorage.getItem("taskflowTheme") || "light";
+    applyTheme(savedTheme);
+
+    function saveSettings() {
+        const selectedTheme = themeSelect.value;
+
+        localStorage.setItem("taskflowTheme", selectedTheme);
+        applyTheme(selectedTheme);
+
+        document.getElementById("saveMessage").textContent =
+            "Preferences saved successfully!";
+    }
+</script>
+
+</body>
+</html>

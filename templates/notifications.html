@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | TaskFlow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .page-content { padding: 35px; flex: 1; }
+        .notification-card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.06);
+        }
+        .notification-card h3 { margin-bottom: 8px; }
+        .notification-card p { color: #777; }
+        .notice-label { font-size: 12px; font-weight: bold; }
+        .empty-message { padding: 25px; background: white; border-radius: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <h2>TaskFlow<span>.</span></h2>
+            <p>PRODUCTIVITY WORKSPACE</p>
+        </div>
+
+        <div class="sidebar-menu">
+            <p class="menu-label">WORKSPACE</p>
+            <a href="/">▦ &nbsp; Dashboard</a>
+            <a href="/#tasks">☑ &nbsp; My Tasks</a>
+            <a href="{{ url_for('calendar') }}">▦ &nbsp; Calendar</a>
+
+            <p class="menu-label">INSIGHTS</p>
+            <a href="{{ url_for('analytics') }}">▥ &nbsp; Analytics</a>
+            <a class="active" href="{{ url_for('notifications') }}">♢ &nbsp; Notifications</a>
+
+            <p class="menu-label">PREFERENCES</p>
+            <a href="{{ url_for('settings') }}">⚙ &nbsp; Settings</a>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-note">
+                Stay organized.<br>Get things done.
+            </div>
+            <div class="sidebar-footer">TASKFLOW © 2026</div>
+        </div>
+    </aside>
+
+    <main class="page-content">
+        <h1>Notifications</h1>
+        <p>Stay updated on your pending tasks and deadlines.</p>
+
+        {% if tasks %}
+            {% for task in tasks %}
+                <div class="notification-card">
+                    <h3>{{ task['title'] }}</h3>
+
+                    {% if task['due_date'] < today %}
+                        <p class="notice-label" style="color:#e74c3c;">
+                            OVERDUE
+                        </p>
+                    {% elif task['due_date'] == today %}
+                        <p class="notice-label" style="color:#e67e22;">
+                            DUE TODAY
+                        </p>
+                    {% else %}
+                        <p class="notice-label" style="color:#27ae60;">
+                            UPCOMING DEADLINE
+                        </p>
+                    {% endif %}
+
+                    <p>Due date: {{ task['due_date'] }}</p>
+                    <p>Priority: {{ task['priority'] }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-message">
+                <h3>You're all caught up!</h3>
+                <p>No pending task notifications right now.</p>
+            </div>
+        {% endif %}
+
+    </main>
+</div>
+<script>
+    
+document.addEventListener("DOMContentLoaded", function () {
+
+    if (!("Notification" in window)) {
+        console.log("Browser notifications are not supported.");
+        return;
+    }
+
+    function showTaskNotifications() {
+        if (Notification.permission !== "granted") return;
+
+        {% if tasks %}
+            {% for task in tasks %}
+                {% if task['due_date'] <= today %}
+                    new Notification(
+                        "{% if task['due_date'] < today %}Overdue Task{% else %}Task Due Today{% endif %}",
+                        {
+                            body: "{{ task['title']|e }}",
+                            tag: "task-{{ task['id'] }}"
+                        }
+                    );
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    }
+
+    if (Notification.permission === "granted") {
+        showTaskNotifications();
+    } else if (Notification.permission === "default") {
+        Notification.requestPermission().then(function (permission) {
+            if (permission === "granted") {
+                showTaskNotifications();
+            }
+        });
+    }
+
+});
+</script>
+</body>
+</html>
